@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NVIDIA Game Store — Premium OS Flow</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght=500;700;900&family=Rajdhani:wght=500;600;700&family=JetBrains+Mono:wght=400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --nv-green: #76B900;
+    --nv-green-dim: #4e7a00;
+    --ink-000: #000000;
+    --surf-1a: #0d0d0d;
+    --surf-24: #141414;
+    --surf-2e: #1c1c1c;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:var(--ink-000);font-family:'Rajdhani',sans-serif;overscroll-behavior:none;}
+  .font-display{font-family:'Orbitron',sans-serif;}
+  .font-mono{font-family:'JetBrains Mono',monospace;}
+  
+  /* Precision Scrollbars */
+  ::-webkit-scrollbar{width:6px;height:6px;}
+  ::-webkit-scrollbar-track{background:#000;}
+  ::-webkit-scrollbar-thumb{background:#1c1c1c;border:1px solid var(--nv-green-dim);}
+  
+  /* Cyber-Sleek Borders & Text */
+  .glow-border{border:1px solid #1c1c1c;transition:border-color .2s ease, box-shadow .2s ease, transform .2s ease;}
+  .glow-border:hover{border-color:var(--nv-green);box-shadow:0 0 20px 0 rgba(118,185,0,.2);transform:translateY(-2px);}
+  .neon-text{color:var(--nv-green);text-shadow:0 0 10px rgba(118,185,0,.4);}
+  
+  /* Motion System */
+  .flicker-in{animation:flickerIn .4s steps(4) both;}
+  @keyframes flickerIn{ 0%{opacity:0;} 25%{opacity:.6;} 50%{opacity:0;} 100%{opacity:1;} }
+  .fade-up{animation:fadeUp .35s cubic-bezier(0.16, 1, 0.3, 1) both;}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(8px);} to{opacity:1;transform:translateY(0);}}
+  
+  /* Loading Elements */
+  .spin-ring{border-radius:50%;border:2px solid #1c1c1c;border-top-color:var(--nv-green);animation:spin 0.7s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  
+  /* Alerts & Notifications */
+  .toast-in{animation:toastIn .4s cubic-bezier(.16,1,.3,1) both;}
+  @keyframes toastIn{from{opacity:0;transform:translateX(40px);} to{opacity:1;transform:translateX(0);}}
+  .toast-out{animation:toastOut .3s ease forwards;}
+  @keyframes toastOut{to{opacity:0;transform:translateX(40px);}}
+  
+  .hidden-view{display:none !important;}
+  .press{transition:transform .1s ease, filter .1s ease;}
+  .press:active{transform:scale(.98);filter:brightness(0.9);}
+  input:focus{outline:none;border-color:var(--nv-green) !important;box-shadow:0 0 10px rgba(118,185,0,0.15);}
+</style>
+</head>
+<body class="text-white select-none antialiased">
+
+<div id="view-desktop" class="relative w-screen h-screen overflow-hidden">
+  <div class="absolute inset-0" style="background:radial-gradient(circle at 50% 30%, rgba(118,185,0,0.06), transparent 60%), #040404;"></div>
+  <div class="absolute inset-0 opacity-[0.03]" style="background-image:linear-gradient(#76B900 1px, transparent 1px), linear-gradient(90deg, #76B900 1px, transparent 1px); background-size:40px 40px;"></div>
+
+  <div class="relative z-10 flex items-center justify-between px-6 py-4 font-mono text-xs text-white/50 border-b border-white/5 backdrop-blur-md bg-black/20">
+    <span class="neon-text font-display font-bold tracking-[0.2em]">NVIDIA SYSTEM PLATFORM</span>
+    <span id="clock" class="tracking-widest">00:00</span>
+  </div>
+
+  <div class="relative z-10 h-[calc(100%-53px)] flex items-center justify-center px-6">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-8 w-full max-w-4xl px-4">
+
+      <button onclick="openBrowser('chrome')" class="press flex flex-col items-center gap-4 group">
+        <div class="w-20 h-20 bg-black glow-border flex items-center justify-center relative">
+          <svg viewBox="0 0 48 48" class="w-10 h-10">
+            <circle cx="24" cy="24" r="20" fill="none" stroke="#EA4335" stroke-width="6" stroke-dasharray="42 500"/>
+            <circle cx="24" cy="24" r="20" fill="none" stroke="#4285F4" stroke-width="6" stroke-dasharray="42 500" stroke-dashoffset="-42"/>
+            <circle cx="24" cy="24" r="20" fill="none" stroke="#34A853" stroke-width="6" stroke-dasharray="42 500" stroke-dashoffset="-84"/>
+            <circle cx="24" cy="24" r="20" fill="none" stroke="#FBBC05" stroke-width="6" stroke-dasharray="42 500" stroke-dashoffset="-126"/>
+            <circle cx="24" cy="24" r="7" fill="#000" stroke="#fff" stroke-width="1"/>
+          </svg>
+        </div>
+        <span class="text-xs font-mono tracking-wider text-white/60 group-hover:text-[#76B900] transition-colors">Google Chrome</span>
+      </button>
+
+      <button onclick="openBrowser('firefox')" class="press flex flex-col items-center gap-4 group">
+        <div class="w-20 h-20 bg-black glow-border flex items-center justify-center">
+          <svg viewBox="0 0 48 48" class="w-10 h-10">
+            <path d="M24 6c9 0 16 7 16 17s-7 17-16 17S8 33 8 23 15 6 24 6z" fill="#FF7139" opacity="0.9"/>
+            <path d="M24 12c6.5 0 11 5 11 11s-4.5 11-11 11-11-5-11-11 4.5-11 11-11z" fill="#FFC53D"/>
+          </svg>
+        </div>
+        <span class="text-xs font-mono tracking-wider text-white/60 group-hover:text-[#76B900] transition-colors">Mozilla Firefox</span>
+      </button>
+
+      <button onclick="openBrowser('brave')" class="press flex flex-col items-center gap-4 group">
+        <div class="w-20 h-20 bg-black glow-border flex items-center justify-center">
+          <svg viewBox="0 0 48 48" class="w-10 h-10">
+            <path d="M24 5 L38 11 L36 34 L24 43 L12 34 L10 11 Z" fill="#FB542B"/>
+            <path d="M24 12 L32 16 L30 32 L24 37 L18 32 L16 16 Z" fill="#000"/>
+          </svg>
+        </div>
+        <span class="text-xs font-mono tracking-wider text-white/60 group-hover:text-[#76B900] transition-colors">Brave Browser</span>
+      </button>
+
+      <button onclick="openBrowser('edge')" class="press flex flex-col items-center gap-4 group">
+        <div class="w-20 h-20 bg-black glow-border flex items-center justify-center">
+          <svg viewBox="0 0 48 48" class="w-10 h-10">
+            <path d="M6 26c0 10 8 16 17 16 6 0 10-2 13-5-8 2-16-2-18-10-1-5 1-9 5-11-6 0-11 4-13 9-2-8 3-16 12-18-14-1-16 12-16 19z" fill="#0FAFEC"/>
+            <path d="M42 22c0-9-7-16-18-16-5 0-9 2-12 5 7-2 15 1 17 8 2 6-1 11-6 13 7 1 13-3 15-9 2 8-4 15-13 16 12 2 17-9 17-17z" fill="#34D2FF" opacity="0.9"/>
+          </svg>
+        </div>
+        <span class="text-xs font-mono tracking-wider text-white/60 group-hover:text-[#76B900] transition-colors">Microsoft Edge</span>
+      </button>
+
+    </div>
+  </div>
+</div>
+
+<div id="view-browser" class="hidden-view fixed inset-0 z-40 flex flex-col bg-black">
+  <div id="browser-topbar" class="flex items-center gap-4 px-5 py-3 border-b border-white/10 bg-[#0d0d0d]">
+    <div class="flex gap-2">
+      <span class="w-3 h-3 rounded-full bg-white/10"></span>
+      <span class="w-3 h-3 rounded-full bg-white/10"></span>
+      <span class="w-3 h-3 rounded-full bg-white/10"></span>
+    </div>
+    <button onclick="goHome()" class="text-white/40 hover:text-[#76B900] transition-colors font-mono text-lg px-2">⌂</button>
+    <div class="flex-1 flex items-center gap-3 bg-black border border-white/5 px-4 py-1.5 font-mono text-xs text-white/40 rounded-sm">
+      <span class="text-[#76B900]/60 select-none">🔒 SECURE //</span>
+      <span id="addr-bar" class="truncate text-white/70">route</span>
+    </div>
+    <button onclick="closeBrowser()" class="text-white/40 hover:text-white transition-colors px-2 font-mono text-xs">✕ CLOSE</button>
+  </div>
+
+  <div id="browser-content" class="relative flex-1 overflow-y-auto bg-black"></div>
+</div>
+
+<div id="view-loading" class="hidden-view fixed inset-0 z-[70] bg-black/95 flex flex-col items-center justify-center gap-4">
+  <div class="w-12 h-12 spin-ring"></div>
+  <p class="font-mono text-xs tracking-[0.2em] text-white/60 uppercase">Authorizing Node Ledger<span id="loading-dots">...</span></p>
+  <p class="font-mono text-sm neon-text font-bold" id="loading-countdown">5.0s</p>
+</div>
+
+<div id="toast-root" class="fixed bottom-6 right-6 z-[80] flex flex-col gap-3"></div>
+
+<script>
+/* ===================== PREMIUM HUB CATALOG DATA ===================== */
+const GAMES = [
+  {id:'cp77', title:'Cyberpunk 2077', tag:'RPG // Open World', grad:'linear-gradient(135deg,#000000,#241802 60%,#76B900 160%)', blurb:'Explore the vast, multi-layered urban landscape of Night City accelerated with full Path Tracing configurations.'},
+  {id:'bmw', title:'Black Myth: Wukong', tag:'Action RPG', grad:'linear-gradient(135deg,#000000,#1f1205 60%,#76B900 160%)', blurb:'Journey into Eastern mythology with real-time hardware-accelerated panoramic ray tracing matrices.'},
+  {id:'ww', title:'Wuthering Waves', tag:'Stylized ARPG', grad:'linear-gradient(135deg,#000000,#071424 60%,#76B900 160%)', blurb:'Experience high-fidelity action sequences with fully synchronized high refresh rate optimizations.'},
+  {id:'wwm', title:'Where Winds Meet', tag:'Wuxia Open World', grad:'linear-gradient(135deg,#000000,#210909 60%,#76B900 160%)', blurb:'Forge your path in an immersive historical epic built around cutting-edge DLSS frame construction.'},
+  {id:'mc', title:'Minecraft RTX', tag:'Sandbox Strategy', grad:'linear-gradient(135deg,#000000,#0b1a05 60%,#76B900 160%)', blurb:'Re-imagine your creative structures with full physically-based path traced lighting dynamics.'},
+  {id:'val', title:'Valorant', tag:'Tactical FPS', grad:'linear-gradient(135deg,#000000,#1f0514 60%,#76B900 160%)', blurb:'Lock down high frame-rates and razor-sharp competitive execution via Reflex ultra-low latency frameworks.'},
+  {id:'sot', title:'Sea of Thieves', tag:'Co-op Adventure', grad:'linear-gradient(135deg,#000000,#031a1a 60%,#76B900 160%)', blurb:'Sail into unpredictable tropical expanses with complete hardware shading architectures.'},
+];
+
+const BROWSER_THEME = {
+  chrome:  {name:'Google Chrome',  accent:'#4285F4', bg:'#000000', text:'#ffffff', panel:'#0d0d0d'},
+  firefox: {name:'Mozilla Firefox', accent:'#FF7139', bg:'#000000', text:'#ffffff', panel:'#0d0d0d'},
+  brave:   {name:'Brave Browser',   accent:'#FB542B', bg:'#000000', text:'#ffffff', panel:'#0d0d0d'},
+  edge:    {name:'Microsoft Edge',  accent:'#0FAFEC', bg:'#000000', text:'#ffffff', panel:'#0d0d0d'},
+};
+
+let state = {
+  activeBrowser: null,
+  activeView: 'home', // home | results | store_about | game_list | game_detail
+  activeGame: null,
+  activeStore: null, 
+};
+
+/* ===================== CLOCK MODULE ===================== */
+function tickClock(){
+  const d = new Date();
+  document.getElementById('clock').textContent = d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit', second:'2-digit'});
+}
+tickClock(); setInterval(tickClock, 1000);
+
+/* ===================== ROUTER CONTROLLERS ===================== */
+function openBrowser(browserKey){
+  state.activeBrowser = browserKey;
+  state.activeView = 'home';
+  const element = document.getElementById('view-browser');
+  element.classList.remove('hidden-view');
+  element.classList.add('flicker-in');
+  renderBrowserContent();
+}
+function closeBrowser(){
+  document.getElementById('view-browser').classList.add('hidden-view');
+  state = {activeBrowser:null, activeView:'home', activeGame:null, activeStore:null};
+}
+function goHome(){
+  state.activeView = 'home';
+  renderBrowserContent();
+}
+
+function renderBrowserContent(){
+  const t = BROWSER_THEME[state.activeBrowser];
+  const root = document.getElementById('browser-content');
+  root.style.background = t.bg;
+  root.style.color = t.text;
+
+  const addr = document.getElementById('addr-bar');
+  const routes = {
+    home: `${state.activeBrowser}://newtab`,
+    results: `websearch?query=nvidia+game+store`,
+    store_about: `nvidiagamestore.com/gateway/about`,
+    game_list: `nvidiagamestore.com/gateway/store`,
+    game_detail: `nvidiagamestore.com/gateway/catalog/${state.activeGame ? state.activeGame.id : ''}`,
+  };
+  addr.textContent = routes[state.activeView] || routes.home;
+
+  root.innerHTML = '';
+  root.classList.add('fade-up');
+  void root.offsetWidth;
+
+  if(state.activeView === 'home') root.appendChild(renderSearchHome(t));
+  else if(state.activeView === 'results') root.appendChild(renderResults(t));
+  else if(state.activeView === 'store_about') root.appendChild(renderStoreAbout());
+  else if(state.activeView === 'game_list') root.appendChild(renderGameList());
+  else if(state.activeView === 'game_detail') root.appendChild(renderGameDetail());
+}
+
+/* ===================== SEARCH VIEWS ===================== */
+function renderSearchHome(t){
+  const wrap = document.createElement('div');
+  wrap.className = 'h-full w-full flex flex-col items-center justify-center px-6 max-w-xl mx-auto';
+  wrap.innerHTML = `
+    <div class="font-display font-black text-2xl tracking-[0.3em] mb-10 text-white/90 uppercase">${t.name}</div>
+    <div class="w-full">
+      <div class="flex items-center gap-4 px-4 py-3 bg-[#0d0d0d] border border-white/10 rounded-none focus-within:border-[#76B900] transition-colors">
+        <input id="search-input" type="text" placeholder="Search internet index matrices..." class="flex-1 bg-transparent text-sm font-mono tracking-wide text-white">
+      </div>
+      <button onclick="doSearch()" class="press mt-4 w-full py-3 bg-white text-black font-mono text-xs font-bold uppercase tracking-widest hover:bg-white/90">Execute Engine Query</button>
+      <button onclick="prefillAndSearch()" class="press mt-3 w-full text-left px-4 py-3 bg-[#0d0d0d] text-xs font-mono text-[#76B900] border border-white/5 hover:border-[#76B900]/30 transition-colors">
+        🔎 Suggestion: nvidia game store
+      </button>
+    </div>
+  `;
+  return wrap;
+}
+function prefillAndSearch(){ state.activeView = 'results'; renderBrowserContent(); }
+function doSearch(){ state.activeView = 'results'; renderBrowserContent(); }
+
+function renderResults(t){
+  const wrap = document.createElement('div');
+  wrap.className = 'max-w-2xl mx-auto px-6 py-12';
+  wrap.innerHTML = `
+    <p class="font-mono text-[10px] text-white/30 tracking-widest uppercase mb-8">System: 1 safe target discovered index</p>
+    <div onclick="openStoreAbout()" class="press bg-[#0d0d0d] border border-white/5 hover:border-[#76B900]/40 p-6 cursor-pointer">
+      <span class="block font-display text-base font-bold text-[#76B900] tracking-wider uppercase">
+        NVIDIA Game Store — Official Portal
+      </span>
+      <span class="block text-[10px] font-mono text-white/30 mt-1">https://www.nvidiagamestore.com</span>
+      <span class="block text-xs font-mono mt-3 text-white/60 leading-relaxed">
+        Access official neural-optimized graphic catalog structures. Cross-verify titles and map secure checkout directly back to verified platform frameworks.
+      </span>
+    </div>
+  `;
+  return wrap;
+}
+function openStoreAbout(){ state.activeView = 'store_about'; renderBrowserContent(); }
+
+/* ===================== OFFICIAL NVIDIA NAVBAR & HUB ===================== */
+function storeNav(active){
+  return `
+  <div class="flex items-center justify-between px-6 sm:px-12 py-5 border-b border-white/10 bg-black sticky top-0 z-10">
+    <div class="font-display font-black tracking-[0.2em] text-xs">
+      <span class="neon-text">NVIDIA</span><span class="text-white/40"> // ARCHIVE</span>
+    </div>
+    <div class="flex gap-8 font-mono text-xs tracking-widest uppercase">
+      <button onclick="openGameList()" class="press transition-colors ${active==='purchase'?'text-[#76B900]':'text-white/40 hover:text-white'}">Purchase Game</button>
+      <button onclick="alert('System Notice: Local digital vault empty. Process store payments first.')" class="press text-white/40 hover:text-white transition-colors">Library</button>
+    </div>
+  </div>`;
+}
+
+function renderStoreAbout(){
+  const wrap = document.createElement('div');
+  wrap.className = 'min-h-full bg-black';
+  wrap.innerHTML = `
+    ${storeNav('about')}
+    <div class="max-w-3xl mx-auto px-6 py-20 text-center">
+      <p class="font-mono text-[10px] tracking-[0.4em] text-[#76B900] mb-3 uppercase">Neural GPU Pipeline Architecture</p>
+      <h1 class="font-display font-black text-2xl sm:text-4xl uppercase tracking-wider leading-tight">
+        Raw Power.<br><span class="text-white/40">Curated Architecture.</span>
+      </h1>
+      <p class="mt-6 text-xs sm:text-sm font-mono text-white/50 leading-relaxed max-w-xl mx-auto">
+        The official terminal catalog for premium graphical fidelity deployments. Review cross-platform execution matrices seamlessly inside an agile architecture framework.
+      </p>
+      <button onclick="openGameList()" class="press mt-10 px-8 py-3.5 font-mono text-xs font-bold bg-[#76B900] text-black tracking-widest uppercase hover:bg-[#86d400]">
+        Initialize Store Matrix
+      </button>
+    </div>
+  `;
+  return wrap;
+}
+function openGameList(){ state.activeView = 'game_list'; renderBrowserContent(); }
+
+/* ===================== CLEAN CATALOG COMPONENT ===================== */
+function renderGameList(){
+  const wrap = document.createElement('div');
+  wrap.className = 'min-h-full bg-black';
+  const cards = GAMES.map(g => `
+    <button onclick="openGameDetail('${g.id}')" class="press bg-[#0d0d0d] border border-white/5 hover:border-[#76B900]/50 text-left flex flex-col transition-all">
+      <div class="h-32 w-full" style="background:${g.grad}"></div>
+      <div class="p-4 border-t border-white/5">
+        <p class="font-mono text-[9px] tracking-widest text-[#76B900] mb-1 uppercase">${g.tag}</p>
+        <p class="font-display font-bold text-xs uppercase tracking-wide truncate text-white/90">${g.title}</p>
+      </div>
+    </button>
+  `).join('');
+  wrap.innerHTML = `
+    ${storeNav('purchase')}
+    <div class="px-6 sm:px-12 py-10 max-w-6xl mx-auto">
+      <h2 class="font-display font-bold text-sm tracking-widest text-white/40 uppercase mb-6">// Core Inventory Catalog</h2>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">${cards}</div>
+    </div>
+  `;
+  return wrap;
+}
+function openGameDetail(id){ state.activeGame = GAMES.find(g=>g.id===id); state.activeView = 'game_detail'; renderBrowserContent(); }
+
+/* ===================== PRODUCT DETAIL MATRIX ===================== */
+function renderGameDetail(){
+  const g = state.activeGame;
+  const wrap = document.createElement('div');
+  wrap.className = 'min-h-full bg-black';
+  wrap.innerHTML = `
+    ${storeNav('purchase')}
+    <div class="h-48 relative border-b border-white/5" style="background:${g.grad}">
+      <button onclick="openGameList()" class="absolute top-4 left-6 font-mono text-[10px] tracking-widest uppercase bg-black/80 px-3 py-1.5 border border-white/10 text-white/60 hover:border-[#76B900] transition-colors">← Inventory Matrix</button>
+    </div>
+    <div class="px-6 sm:px-12 py-10 max-w-3xl mx-auto">
+      <p class="font-mono text-[10px] tracking-widest text-[#76B900] mb-2 uppercase">${g.tag}</p>
+      <h2 class="font-display font-black text-xl sm:text-2xl tracking-wide uppercase mb-4 text-white/90">${g.title}</h2>
+      <p class="text-xs sm:text-sm font-mono text-white/50 leading-relaxed mb-10">${g.blurb}</p>
+
+      <p class="font-mono text-[9px] tracking-[0.2em] text-white/30 mb-4 uppercase">Secure External Merchant Link Routing</p>
+      <div class="grid sm:grid-cols-2 gap-4">
+        <button onclick="startCheckout('Steam')" class="press bg-black border border-white/10 hover:border-[#1b2838] p-5 flex items-center justify-between group transition-colors">
+          <span class="font-mono text-xs tracking-wider uppercase text-white/80">Buy Now via <span class="text-[#1b2838] font-bold group-hover:text-white transition-colors">Steam</span></span>
+          <span class="font-mono text-xs text-white/20">>></span>
+        </button>
+        <button onclick="startCheckout('Epic Games')" class="press bg-black border border-white/10 hover:border-[#ffffff] p-5 flex items-center justify-between group transition-colors">
+          <span class="font-mono text-xs tracking-wider uppercase text-white/80">Buy Now via <span class="text-white/40 font-bold group-hover:text-white transition-colors">Epic Games</span></span>
+          <span class="font-mono text-xs text-white/20">>></span>
+        </button>
+      </div>
+    </div>
+  `;
+  return wrap;
+}
+
+/* ===================== VERIFIED LOGIN PIPELINE ===================== */
+function startCheckout(storeName){ state.activeStore = storeName; openModal(renderAuthModal(storeName)); }
+function renderAuthModal(storeName){
+  const box = document.createElement('div');
+  box.className = 'w-full max-w-sm bg-black border border-white/10 p-6 sm:p-8 rounded-none';
+  box.innerHTML = `
+    <p class="font-mono text-[9px] tracking-widest text-white/30 mb-1 uppercase">AUTHENTICATE LEDGER</p>
+    <h3 class="font-display font-bold text-sm tracking-widest uppercase mb-6 text-white/90">${storeName} Account Login</h3>
+
+    <div class="mb-4">
+      <label class="block font-mono text-[10px] tracking-wider text-white/40 uppercase mb-1.5">User Username Identifier</label>
+      <input id="auth-user" type="text" placeholder="identity#0000" class="w-full bg-[#0d0d0d] border border-white/5 px-3 py-2 text-xs font-mono text-white">
+      <p id="err-user" class="text-red-400 text-[10px] font-mono mt-1 h-3"></p>
+    </div>
+
+    <div class="mb-6">
+      <label class="block font-mono text-[10px] tracking-wider text-white/40 uppercase mb-1.5">Secret System Keyphrase</label>
+      <input id="auth-pass" type="password" placeholder="••••••••" class="w-full bg-[#0d0d0d] border border-white/5 px-3 py-2 text-xs font-mono text-white">
+      <p id="err-pass" class="text-red-400 text-[10px] font-mono mt-1 h-3"></p>
+    </div>
+
+    <button onclick="submitAuth('${storeName}')" class="press w-full py-3 bg-[#76B900] text-black font-mono text-xs font-bold tracking-widest uppercase hover:bg-[#86d400]">
+      Verify Access Node
+    </button>
+    <button onclick="closeModal()" class="press w-full mt-2 py-2 font-mono text-[10px] text-white/30 tracking-widest uppercase hover:text-white">Abort</button>
+  `;
+  return box;
+}
+
+function submitAuth(storeName){
+  const user = document.getElementById('auth-user').value;
+  const pass = document.getElementById('auth-pass').value;
+  let isValid = true;
+  const errUser = document.getElementById('err-user');
+  const errPass = document.getElementById('err-pass');
+  errUser.textContent = ''; errPass.textContent = '';
+
+  if(!user.includes('#')){ errUser.textContent = 'Validation error: Username field missing "#" signature.'; isValid = false; }
+  if(pass.length < 8){ errPass.textContent = 'Validation error: Security password must span >= 8 indexes.'; isValid = false; }
+  if(!isValid) return;
+
+  openModal(renderPaymentModal(storeName));
+}
+
+/* ===================== POLISHED SECURE PAYMENT GATEWAY ===================== */
+let paymentTab = 'esewa';
+function renderPaymentModal(storeName){
+  const box = document.createElement('div');
+  box.className = 'w-full max-w-sm bg-black border border-white/10 p-6 sm:p-8 rounded-none';
+  box.id = 'payment-box';
+  paymentTab = 'esewa';
+  box.innerHTML = paymentInner(storeName);
+  return box;
+}
+function paymentInner(storeName){
+  return `
+    <p class="font-mono text-[9px] tracking-widest text-white/30 mb-1 uppercase">${storeName} // DEPOSIT ROUTE</p>
+    <h3 class="font-display font-bold text-sm tracking-widest uppercase mb-6 text-white/90">Asset Settlement Details</h3>
+
+    <div class="flex mb-6 border border-white/10">
+      <button onclick="switchPayTab('esewa','${storeName}')" class="flex-1 py-2 font-mono text-[10px] tracking-widest uppercase transition-colors ${paymentTab==='esewa' ? 'bg-[#76B900] text-black font-bold' : 'text-white/40 hover:text-white bg-[#0d0d0d]'}">eSewa Wallet</button>
+      <button onclick="switchPayTab('card','${storeName}')" class="flex-1 py-2 font-mono text-[10px] tracking-widest uppercase transition-colors ${paymentTab==='card' ? 'bg-[#76B900] text-black font-bold' : 'text-white/40 hover:text-white bg-[#0d0d0d]'}">Bank Protocol</button>
+    </div>
+
+    <div id="pay-fields" class="space-y-4 mb-6">
+      ${paymentTab==='esewa' ? `
+        <div>
+          <label class="block font-mono text-[10px] tracking-wider text-white/40 uppercase mb-1">eSewa Mobile ID</label>
+          <input type="text" placeholder="98XXXXXXXX" class="w-full bg-[#0d0d0d] border border-white/5 px-3 py-2 text-xs font-mono text-white">
+        </div>
+        <div>
+          <label class="block font-mono text-[10px] tracking-wider text-white/40 uppercase mb-1">Secure MPIN Signature</label>
+          <input type="password" placeholder="••••" class="w-full bg-[#0d0d0d] border border-white/5 px-3 py-2 text-xs font-mono text-white">
+        </div>
+      ` : `
+        <div>
+          <label class="block font-mono text-[10px] tracking-wider text-white/40 uppercase mb-1">Account Card Index Number</label>
+          <input type="text" placeholder="4242 4242 4242 4242" class="w-full bg-[#0d0d0d] border border-white/5 px-3 py-2 text-xs font-mono text-white">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-mono text-[10px] tracking-wider text-white/40 uppercase mb-1">Expiration</label>
+            <input type="text" placeholder="MM/YY" class="w-full bg-[#0d0d0d] border border-white/5 px-3 py-2 text-xs font-mono text-white">
+          </div>
+          <div>
+            <label class="block font-mono text-[10px] tracking-wider text-white/40 uppercase mb-1">Security Code</label>
+            <input type="text" placeholder="CVC" class="w-full bg-[#0d0d0d] border border-white/5 px-3 py-2 text-xs font-mono text-white">
+          </div>
+        </div>
+      `}
+    </div>
+
+    <button onclick="confirmPayment()" class="press w-full py-3 bg-[#76B900] text-black font-mono text-xs font-bold tracking-widest uppercase hover:bg-[#86d400]">
+      Confirm Payment Execution
+    </button>
+    <button onclick="closeModal()" class="press w-full mt-2 py-2 font-mono text-[10px] text-white/30 tracking-widest uppercase hover:text-white">Cancel</button>
+  `;
+}
+function switchPayTab(tab, storeName){ paymentTab = tab; document.getElementById('payment-box').innerHTML = paymentInner(storeName); }
+
+/* ===================== LOADING PROCESSOR & TOAST MATRIX ===================== */
+function confirmPayment(){
+  closeModal();
+  document.getElementById('view-loading').classList.remove('hidden-view');
+  let count = 5.0;
+  const counterElement = document.getElementById('loading-countdown');
+  const dotsElement = document.getElementById('loading-dots');
+  let step = 0;
+  
+  const timer = setInterval(()=>{
+    count -= 0.1;
+    if(count < 0) count = 0;
+    counterElement.textContent = count.toFixed(1)+'s';
+    step = (step + 1) % 4;
+    dotsElement.textContent = '.'.repeat(step);
+  }, 100);
+
+  setTimeout(()=>{
+    clearInterval(timer);
+    document.getElementById('view-loading').classList.add('hidden-view');
+    state.activeView = 'game_list';
+    renderBrowserContent();
+    fireToastNotification();
+  }, 5000);
+}
+
+function fireToastNotification(){
+  const root = document.getElementById('toast-root');
+  const toastContainer = document.createElement('div');
+  toastContainer.className = 'toast-in bg-black border border-[#76B900]/50 shadow-[0_0_20px_rgba(118,185,0,0.15)] px-5 py-4 max-w-xs font-mono text-xs tracking-wide text-white/90';
+  toastContainer.innerHTML = `🎉 Success! Game successfully compiled and added to your NVIDIA Library.`;
+  root.appendChild(toastContainer);
+  
+  setTimeout(()=>{
+    toastContainer.classList.remove('toast-in');
+    toastContainer.classList.add('toast-out');
+    setTimeout(()=> toastContainer.remove(), 300);
+  }, 4000);
+}
+
+/* ===================== SHIELD DESIGN MODAL SYSTEM ===================== */
+function openModal(element){
+  let wrapper = document.getElementById('modal-overlay');
+  if(!wrapper){
+    wrapper = document.createElement('div');
+    wrapper.id = 'modal-overlay';
+    wrapper.className = 'fixed inset-0 z-[60] bg-black/85 flex items-center justify-center px-4 backdrop-blur-sm';
+    document.body.appendChild(wrapper);
+  }
+  wrapper.innerHTML = '';
+  wrapper.appendChild(element);
+  wrapper.classList.remove('hidden-view');
+}
+function closeModal(){ const wrapper = document.getElementById('modal-overlay'); if(wrapper) wrapper.classList.add('hidden-view'); }
+</script>
+</body>
+</html>
