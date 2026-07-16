@@ -6,5 +6,7 @@ public class casting {
          int p=100;
         int fp=p+(int)28.00;
         System.out.println(fp);
+
+
     }
 }
