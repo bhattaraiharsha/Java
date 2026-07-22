@@ -1,6 +1,6 @@
 public class sort {
     public static void main(String[] args) {
-        int a = 80;
+        int a = 8;
         int b = 10;
         int c = 30;
         int[] numbers = {a, b, c};
