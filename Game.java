@@ -3,20 +3,16 @@ import java.io.*;
 public class Game {
     public static void main(String[] args) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        
         System.out.println("Enter difficulty level from 1 to 5:");
         String inputStr = reader.readLine();
         int i = Integer.parseInt(inputStr);
-
         if (i == 1) {
             System.out.println("\nDifficulty level = Very Easy");
             System.out.println("Press Enter to continue...");
-            reader.readLine(); // Waits for Enter
-            
+            reader.readLine();
             System.out.println("Solve the problem:");
             System.out.println("Find x when: 2x + 3x = 5");
             System.out.println("Are you ready? You have 10 seconds (type 'yes' or anything else):");
-            
             String ready = reader.readLine();
             if (ready.equalsIgnoreCase("yes")) {
                 System.out.println("Great! Enter your answer for x:");
@@ -24,7 +20,6 @@ public class Game {
                 System.out.println("Take your time, when ready let's continue.");
                 System.out.println("Enter your answer for x:");
             }
-            
             int x = Integer.parseInt(reader.readLine());
             if (x == 1) {
                 System.out.println("That was easy! Try other levels.");
@@ -65,7 +60,7 @@ public class Game {
             }
         } 
         else if (i == 4) {
-            System.out.println("\nDifficulty level = Hard");
+            System.out.println("Difficulty level = Hard");
             System.out.println("Press Enter to continue...");
             reader.readLine();
             
